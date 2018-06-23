@@ -1,6 +1,8 @@
 import express from 'express'
 import bodyParser from "body-parser"
 import mongoose from "mongoose"
+import router from './routes';
+
 
 
 const app = express();
@@ -14,5 +16,6 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {
     console.log('Connected!')
 });
+app.use(router);
 
 export default app;

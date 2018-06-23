@@ -1,7 +1,7 @@
 import {ObjectID} from "bson";
 
 export interface Saleable {
-    id: string;
+    id: ObjectID;
     price: number;
     setPrice(price: number): void
     categoryId: ObjectID;

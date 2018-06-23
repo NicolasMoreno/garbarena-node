@@ -7,26 +7,36 @@ import {ObjectID} from "bson";
 
 export class BaseProduct implements BaseProductAPI {
     categoryId: ObjectID;
-    id: string;
+    id: ObjectID;
     name: string;
     price: number;
     productType: Type;
 
+    constructor(baseProduct: any) {
+        this.categoryId = baseProduct.categoryId;
+        this.id = baseProduct.id;
+        this.name = baseProduct.name;
+        this.price = baseProduct.price;
+        this.productType = baseProduct.productType
+    }
+
     setPrice(price: number): void {
+        this.price = price
     }
 
     setProductType(type: Type): void {
+        this.productType = type
     }
 
 }
 
-const baseProductSchema = new mongoose.Schema({
-    name: String,
-    price: Number,
+/*const baseProductSchema = new mongoose.Schema({
+    name: {type: String, required: true},
+    price: {type: Number, required: true},
     categoryId: mongoose.Schema.Types.ObjectId,
-    type: TypeSchema,
+    productType: {type: TypeSchema, required: true},
 });
 
 const BaseProductSchema = mongoose.model("BaseProduct", baseProductSchema);
-export default BaseProductSchema
+export default BaseProductSchema*/
 
