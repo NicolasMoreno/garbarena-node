@@ -1,5 +1,4 @@
 import {Saleable} from "../../product-api/model/Saleable";
-import TypeSchema from "../model/Type";
 import mongoose from "mongoose";
 import {ComposedProduct} from "../model/ComposedProduct";
 import {BaseProduct} from "../model/BaseProduct";
@@ -17,7 +16,7 @@ export class SaleableRepository {
 
     private getSaleableInstance(saleable: Saleable)  {
         if (saleable instanceof ComposedProduct) {
-            return new SaleableSchema({
+            return new NewSaleableSchema({
                 name: saleable.name,
                 price: saleable.price,
                 categoryId: saleable.categoryId,
@@ -26,7 +25,7 @@ export class SaleableRepository {
             })
         } else
         if (saleable instanceof BaseProduct) {
-            return new SaleableSchema({
+            return new NewSaleableSchema({
                 name: saleable.name,
                 price: saleable.price,
                 categoryId: saleable.categoryId,
@@ -38,12 +37,16 @@ export class SaleableRepository {
     }
 }
 
+const typeSchema = new mongoose.Schema({
+    value: String
+});
+
 const saleableSchema = new mongoose.Schema({
     name: {type: String, required: true},
     price: {type: Number, required: true},
     categoryId: mongoose.Schema.Types.ObjectId,
-    productType: {type: mongoose.Schema.Types.Mixed, required: true},
+    productType: {type: typeSchema, required: true},
     products: [mongoose.Schema.Types.Mixed],
 });
 
-const SaleableSchema = mongoose.model("Saleable", saleableSchema);
+const NewSaleableSchema = mongoose.model("Saleable", saleableSchema);

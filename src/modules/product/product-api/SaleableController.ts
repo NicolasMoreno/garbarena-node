@@ -1,8 +1,8 @@
-import {NextFunction, Request, Response} from "express";
+import {Request, Response} from "express";
 
 export interface SaleableController {
-    getProductById(req: Request, res: Response, next: NextFunction): void
-    addProduct(req: Request, res: Response, next: NextFunction): void
-    updateProduct(req: Request, res: Response, next: NextFunction): void
+    getProductById(req: Request, res: Response): void
+    addProduct(req: Request, res: Response): void
+    updateProduct(req: Request, res: Response): void
     getAllProducts(): void
 }
