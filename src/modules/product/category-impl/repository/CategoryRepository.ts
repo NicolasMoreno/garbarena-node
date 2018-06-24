@@ -31,6 +31,8 @@ export class CategoryRepository {
 
 const newCategorySchema = new mongoose.Schema({
     categories: [mongoose.Schema.Types.Mixed],
+    /* Todo, ver bien si podría ser el id de la categoría, debería pasarle un nombre de categoría y si existe,
+     no hacer nada y si no crearlo y asignarlo */
     name: String
 });
 

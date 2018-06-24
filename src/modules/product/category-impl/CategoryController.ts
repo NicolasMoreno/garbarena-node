@@ -9,7 +9,7 @@ export class CategoryController implements CategoryControllerAPI {
 
     constructor(private categoryRepo: CategoryRepository) {}
 
-    addCategory(req: Request, res: Response): void {
+    addCategory = (req: Request, res: Response): void => {
         const category: CategoryAPI = this.buildCategoryFromBody(req.body);
         this.categoryRepo.addCategory(category, (err, categoryCallBack) => {
             if(err) {

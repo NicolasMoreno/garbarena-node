@@ -37,16 +37,12 @@ export class SaleableRepository {
     }
 }
 
-const typeSchema = new mongoose.Schema({
-    value: String
-});
-
 const saleableSchema = new mongoose.Schema({
     name: {type: String, required: true},
     price: {type: Number, required: true},
     categoryId: mongoose.Schema.Types.ObjectId,
-    productType: {type: typeSchema, required: true},
-    products: [mongoose.Schema.Types.Mixed],
+    productType: mongoose.Schema.Types.Mixed,
+    products: [mongoose.Schema.Types.Mixed], // TODO ME MOLESTA EL ARRAY DE PRODUCTS EN UN PRODUCTO BASE
 });
 
 const NewSaleableSchema = mongoose.model("Saleable", saleableSchema);
