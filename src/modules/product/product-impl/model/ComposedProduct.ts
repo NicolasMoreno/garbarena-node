@@ -1,8 +1,8 @@
 import {ComposedProduct as ComposedProductAPI} from '../../product-api/model/ComposedProduct'
-import mongoose from "mongoose";
 import {ObjectID} from "bson";
 import {Saleable} from '../../product-api/model/Saleable'
-import TypeSchema, {Type} from "./Type";
+import {Type} from "./Type";
+import {ComposedProductSchema} from "./ComposedProductSchema";
 
 
 export class ComposedProduct implements ComposedProductAPI {
@@ -10,33 +10,50 @@ export class ComposedProduct implements ComposedProductAPI {
     id: ObjectID;
     name: string;
     price: number;
-    products: Saleable[];
+    products: ObjectID[];
     productType: Type;
+    private _id: ObjectID;
+
+    private _productsObjectList: Saleable[] = [];
 
     constructor(baseProduct: any) {
         this.categoryId = baseProduct.categoryId;
         this.id = baseProduct.id;
+        this._id = baseProduct._id;
         this.name = baseProduct.name;
-        this.price = baseProduct.price;
+        this.products = baseProduct.products;
         this.productType = new Type( {value: 'Combo'})
     }
 
-    addProduct(saleable: Saleable): Saleable[] {
+    addProduct(saleable: ObjectID): ObjectID[] {
         this.products.push(saleable);
         return this.products;
     }
 
-    removeProduct(saleable: Saleable): Saleable[] {
-        this.products = this.products.filter(product => product.id !== saleable.id);
+    removeProduct(saleable: ObjectID): ObjectID[] {
+        this.products = this.products.filter(product => !product.equals(saleable));
         return this.products
     }
 
-    setPrice(price: number): void {
+    setPrice(): void {
         this.price = 0;
-        this.products.forEach( product => this.price += product.price);
-        this.price += price;
+        this._productsObjectList.forEach( product => {
+            if (product instanceof ComposedProductSchema) {
+                product.setPrice();
+                this.price += product.price;
+            } else {
+                this.price += product.price
+            }
+        });
     }
 
+    addProductObject(saleable: Saleable) {
+        this._productsObjectList.push(saleable);
+    }
+
+    get productsObjectList() {
+        return this._productsObjectList
+    }
 }
 
 /*

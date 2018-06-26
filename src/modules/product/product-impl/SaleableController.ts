@@ -11,9 +11,9 @@ export class SaleableController implements SaleableControllerAPI {
     constructor(private repository: SaleableRepository) {}
 
     addProduct = (req: Request, res: Response) => {
-        const saleable: Saleable = this.buildSaleableFromBody(req.body);
+        const saleable: Saleable = this.buildSaleableFromBody(req, res);
         this.repository.addProduct(saleable,
-            (err, admin) => {
+            (err, product) => {
                 if (err) {
                     return res.status(400).send({
                         status: 400,
@@ -22,12 +22,12 @@ export class SaleableController implements SaleableControllerAPI {
                 }
                 return res.send({
                     status: 200,
-                    createdAdmin: admin
+                    createdProduct: product
                 });
-            })
+            }, (errorMessage) => res.status(400).send({status: 400, error: errorMessage}))
     };
 
-    getAllProducts(): Saleable[] {
+    getAllProducts(): void {
         return undefined;
     }
 
@@ -39,11 +39,12 @@ export class SaleableController implements SaleableControllerAPI {
         return undefined;
     }
 
-    private buildSaleableFromBody(body: any): Saleable {
-        if (body.productType.value === 'Combo') {
-            return new ComposedProduct(body)
+    private buildSaleableFromBody(req: Request, res: Response): Saleable {
+        const type = req.body.productType.value;
+        if (type === 'Combo') {
+            return new ComposedProduct(req.body)
         } else {
-            return new BaseProduct(body)
+            return new BaseProduct(req.body)
         }
     }
 }

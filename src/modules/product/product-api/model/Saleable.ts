@@ -1,9 +1,10 @@
 import {ObjectID} from "bson";
+import {Type} from "./Type";
 
 export interface Saleable {
     id: ObjectID;
     price: number;
-    setPrice(price: number): void
     categoryId: ObjectID;
     name: string;
+    productType: Type;
 }

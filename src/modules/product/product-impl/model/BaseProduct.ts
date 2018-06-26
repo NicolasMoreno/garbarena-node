@@ -12,9 +12,12 @@ export class BaseProduct implements BaseProductAPI {
     price: number;
     productType: Type;
 
+    private _id: ObjectID;
+
     constructor(baseProduct: any) {
         this.categoryId = baseProduct.categoryId;
         this.id = baseProduct.id;
+        this._id = baseProduct._id;
         this.name = baseProduct.name;
         this.price = baseProduct.price;
         this.productType = baseProduct.productType
