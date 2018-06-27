@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import {Category as CategoryAPI} from "../../category-api/model/Category";
 import {ComposedCategory} from "../model/ComposedCategory";
 import {Category} from "../model/Category";
+import {ObjectID} from "bson";
+import {NewSaleableSchema} from "../../product-impl/repository/SaleableRepository";
 
 export class CategoryRepository {
 
@@ -23,6 +25,14 @@ export class CategoryRepository {
         if (categoryDocument) {
             return categoryDocument.save(callback)
         }
+    }
+
+    public getProductsByCategoryId(categoryId: ObjectID, callback: (error: any, response: any) => Response) {
+        return NewSaleableSchema.find({categoryId: categoryId}, callback)
+    }
+
+    public getProductsByCategory(category: CategoryAPI, callback: (error: any, response: any) => Response) {
+        return this.getProductsByCategoryId(category.id, callback)
     }
 
     private getCategoryInstance(category: CategoryAPI) {

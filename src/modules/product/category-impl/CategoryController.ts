@@ -7,7 +7,7 @@ import {Category} from "./model/Category";
 
 export class CategoryController implements CategoryControllerAPI {
 
-    private categoryRepo: CategoryRepository = CategoryRepository.getInstance()
+    private categoryRepo: CategoryRepository = CategoryRepository.getInstance();
 
     addCategory = (req: Request, res: Response): void => {
         const category: CategoryAPI = this.buildCategoryFromBody(req.body);
@@ -23,10 +23,22 @@ export class CategoryController implements CategoryControllerAPI {
                 createdCategory: categoryCallBack
             })
         })
-    }
+    };
 
-    getProductsByCategory(req: Request, res: Response): void {
-    }
+    getProductsByCategory = (req: Request, res: Response): void => {
+        this.categoryRepo.getProductsByCategoryId(req.params.categoryId, (error, response) => {
+            if (error) {
+                return res.status(500).send({
+                    status: 500,
+                    error: error
+                })
+            }
+            return res.send({
+                status: 200,
+                products: response
+            })
+        })
+    };
 
     removeCategory(req: Request, res: Response): void {
     }

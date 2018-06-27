@@ -11,7 +11,7 @@ export class SaleableController implements SaleableControllerAPI {
     private repository: SaleableRepository;
 
     constructor() {
-        this.repository = new SaleableRepository();
+        this.repository = SaleableRepository.getInstance();
     }
 
     addProduct = (req: Request, res: Response) => {

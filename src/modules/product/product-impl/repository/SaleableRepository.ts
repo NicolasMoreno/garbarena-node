@@ -107,4 +107,4 @@ const saleableSchema = new mongoose.Schema({
     products: {type: [mongoose.Schema.Types.Mixed], required: () => saleableSchema.get('productType') === 'Combo'}, // TODO ME MOLESTA EL ARRAY DE PRODUCTS EN UN PRODUCTO BASE
 });
 
-const NewSaleableSchema = mongoose.model("Saleable", saleableSchema);
+export const NewSaleableSchema = mongoose.model("Saleable", saleableSchema);

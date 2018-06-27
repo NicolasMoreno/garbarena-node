@@ -11,6 +11,7 @@ router.get('/api/product/id/:productId', saleableController.getProductById);
 router.post('/api/product/add', saleableController.addProduct);
 router.put('/api/product/update', saleableController.updateProduct);
 router.get('/api/product/all', saleableController.getAllProducts);
+router.get('/api/product/category/:categoryId', categoryController.getProductsByCategory);
 
 // Category
 router.post('/api/category/add', categoryController.addCategory);
