@@ -7,7 +7,7 @@ import {Category} from "./model/Category";
 
 export class CategoryController implements CategoryControllerAPI {
 
-    constructor(private categoryRepo: CategoryRepository) {}
+    private categoryRepo: CategoryRepository = CategoryRepository.getInstance()
 
     addCategory = (req: Request, res: Response): void => {
         const category: CategoryAPI = this.buildCategoryFromBody(req.body);

@@ -7,7 +7,6 @@ import {ComposedProductSchema} from "./ComposedProductSchema";
 
 export class ComposedProduct implements ComposedProductAPI {
     categoryId: ObjectID;
-    id: ObjectID;
     name: string;
     price: number;
     products: ObjectID[];
@@ -18,7 +17,6 @@ export class ComposedProduct implements ComposedProductAPI {
 
     constructor(baseProduct: any) {
         this.categoryId = baseProduct.categoryId;
-        this.id = baseProduct.id;
         this._id = baseProduct._id;
         this.name = baseProduct.name;
         this.products = baseProduct.products;
@@ -53,6 +51,10 @@ export class ComposedProduct implements ComposedProductAPI {
 
     get productsObjectList() {
         return this._productsObjectList
+    }
+
+    id(): ObjectID {
+        return this._id
     }
 }
 

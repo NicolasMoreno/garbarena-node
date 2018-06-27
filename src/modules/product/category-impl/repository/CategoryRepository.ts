@@ -6,6 +6,18 @@ import {Category} from "../model/Category";
 
 export class CategoryRepository {
 
+    private static _instance: CategoryRepository = new CategoryRepository();
+
+    constructor() {
+        if(!CategoryRepository._instance) {
+            CategoryRepository._instance = this;
+        }
+    }
+
+    public static getInstance(): CategoryRepository {
+        return this._instance;
+    }
+
     public addCategory(category: CategoryAPI, callback: (error: any, response: any) => Response|void) {
         const categoryDocument = this.getCategoryInstance(category);
         if (categoryDocument) {

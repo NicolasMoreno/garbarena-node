@@ -5,13 +5,12 @@ import {Saleable} from "../../product-api/model/Saleable";
 
 export class ComposedProductSchema {
     categoryId: ObjectID;
-    id: ObjectID;
     name: string;
     price: number;
     products: Saleable[];
     productType: Type;
 
-    private _id: ObjectID;
+    private readonly _id: ObjectID;
 
 
     constructor(baseProduct: any) {
@@ -32,5 +31,9 @@ export class ComposedProductSchema {
                 this.price += product.price
             }
         });
+    }
+
+    id() {
+        return this._id;
     }
 }

@@ -7,16 +7,14 @@ import {ObjectID} from "bson";
 
 export class BaseProduct implements BaseProductAPI {
     categoryId: ObjectID;
-    id: ObjectID;
     name: string;
     price: number;
     productType: Type;
 
-    private _id: ObjectID;
+    private readonly _id: ObjectID;
 
     constructor(baseProduct: any) {
         this.categoryId = baseProduct.categoryId;
-        this.id = baseProduct.id;
         this._id = baseProduct._id;
         this.name = baseProduct.name;
         this.price = baseProduct.price;
@@ -29,6 +27,10 @@ export class BaseProduct implements BaseProductAPI {
 
     setProductType(type: Type): void {
         this.productType = type
+    }
+
+    id() {
+        return this._id;
     }
 
 }

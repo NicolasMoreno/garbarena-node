@@ -9,6 +9,18 @@ import {ComposedProductSchema} from "../model/ComposedProductSchema";
 
 export class SaleableRepository {
 
+    private static _instance: SaleableRepository = new SaleableRepository();
+
+    constructor() {
+        if(!SaleableRepository._instance) {
+            SaleableRepository._instance = this;
+        }
+    }
+
+    public static getInstance(): SaleableRepository {
+        return this._instance;
+    }
+
     public addProduct(saleable: Saleable, callback: (error : any, response: any) => Response|void, error?: (message: string) => Response ) {
         this.getSaleableInstance(saleable).then(
             (saleableDocument) => {
@@ -23,15 +35,19 @@ export class SaleableRepository {
     }
 
     public updateProduct(saleable: Saleable, callback: (error: any, response: any) => Response,
-                         notFoundCallback: (message: string) => Response) {
-        this.getProductById(saleable.id, (errorFound, saleableFound) => {
-            if (errorFound) return errorFound;
+                         notFoundCallback?: (message: string) => Response) {
+        this.getProductById(saleable.id(), (errorFound, saleableFound) => {
+            if (errorFound) return notFoundCallback("Error updating product");
             if (saleableFound) {
                 saleableFound.update(saleable, callback)
             } else {
-                notFoundCallback("Error updating product")
+                notFoundCallback("Product not found")
             }
         })
+    }
+
+    public getAllProducts(callback: (error: any, response: any) => Response) {
+        return NewSaleableSchema.find({}, callback)
     }
 
     private getProductByArrayId(saleablesId: ObjectID[]): Promise<any> {

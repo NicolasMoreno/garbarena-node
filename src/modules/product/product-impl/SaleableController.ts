@@ -8,9 +8,14 @@ import {BaseProduct} from "./model/BaseProduct";
 
 export class SaleableController implements SaleableControllerAPI {
 
-    constructor(private repository: SaleableRepository) {}
+    private repository: SaleableRepository;
+
+    constructor() {
+        this.repository = new SaleableRepository();
+    }
 
     addProduct = (req: Request, res: Response) => {
+        this.repository = SaleableRepository.getInstance();
         const saleable: Saleable = this.buildSaleableFromBody(req, res);
         this.repository.addProduct(saleable,
             (err, product) => {
@@ -27,13 +32,43 @@ export class SaleableController implements SaleableControllerAPI {
             }, (errorMessage) => res.status(400).send({status: 400, error: errorMessage}))
     };
 
-    getAllProducts(): void {
-        return undefined;
-    }
+    getAllProducts = (req: Request, res: Response): void => {
+        this.repository.getAllProducts( (error: any, response: any) => {
+            if(response) {
+                return res.send({
+                    status: 200,
+                    products: response
+                })
+            } else {
+                return res.status(500).send({
+                    status: 500,
+                    error: "Error obtaining all products"
+                })
+            }
+        })
+    };
 
-    getProductById(req: Request, res: Response): void {
-        return undefined;
-    }
+    getProductById = (req: Request, res: Response) => {
+        this.repository = SaleableRepository.getInstance();
+        this.repository.getProductById(req.params.productId, (error, product) => {
+            if (error) {
+                return res.status(500).send({
+                    status: 500,
+                    error: error.message
+                });
+            }
+            if (!product) {
+                return res.status(404).send({
+                    status: 404,
+                    error: "Product with given id not exist"
+                })
+            }
+            return res.send({
+                status: 200,
+                createdProduct: product
+            });
+        })
+    };
 
     updateProduct(req: Request, res: Response): void {
         return undefined;
