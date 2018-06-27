@@ -15,7 +15,6 @@ export class SaleableController implements SaleableControllerAPI {
     }
 
     addProduct = (req: Request, res: Response) => {
-        this.repository = SaleableRepository.getInstance();
         const saleable: Saleable = this.buildSaleableFromBody(req, res);
         this.repository.addProduct(saleable,
             (err, product) => {
@@ -49,7 +48,6 @@ export class SaleableController implements SaleableControllerAPI {
     };
 
     getProductById = (req: Request, res: Response) => {
-        this.repository = SaleableRepository.getInstance();
         this.repository.getProductById(req.params.productId, (error, product) => {
             if (error) {
                 return res.status(500).send({
@@ -65,13 +63,33 @@ export class SaleableController implements SaleableControllerAPI {
             }
             return res.send({
                 status: 200,
-                createdProduct: product
+                product: product
             });
         })
     };
 
-    updateProduct(req: Request, res: Response): void {
-        return undefined;
+    updateProduct = (req: Request, res: Response): void => {
+        const saleableToUpdate: Saleable = this.buildSaleableFromBody(req,res);
+        this.repository.updateProduct(saleableToUpdate,
+            (error: any, response: any) => {
+                if (error) {
+                    return res.status(500).send({
+                        status: 500,
+                        error: error
+                    })
+                }
+                if (response.ok) {
+                    return res.send({
+                        status: 200,
+                        product: saleableToUpdate
+                    })
+                }
+            }, (errorMessage) => {
+                return res.status(500).send({
+                    status: 500,
+                    error: errorMessage
+                })
+            })
     }
 
     private buildSaleableFromBody(req: Request, res: Response): Saleable {
