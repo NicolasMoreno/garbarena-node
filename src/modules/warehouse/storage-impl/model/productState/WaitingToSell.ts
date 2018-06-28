@@ -13,4 +13,6 @@ export class WaitingToSell implements ProductState {
         return true;
     }
 
+    readonly stateName: string = 'WaitingToSell';
+
 }

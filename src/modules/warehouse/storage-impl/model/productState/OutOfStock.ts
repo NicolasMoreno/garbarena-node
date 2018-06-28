@@ -10,4 +10,6 @@ export class OutOfStock implements ProductState {
         return false;
     }
 
+    readonly stateName: string = 'OutOfStock';
+
 }

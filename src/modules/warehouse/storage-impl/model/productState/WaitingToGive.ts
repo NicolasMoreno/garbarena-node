@@ -10,4 +10,6 @@ export class WaitingToGive implements ProductState {
         return false;
     }
 
+    readonly stateName: string = 'WaitingToGive';
+
 }

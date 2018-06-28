@@ -19,8 +19,8 @@ export class SaleableController implements SaleableControllerAPI {
         this.repository.addProduct(saleable,
             (err, product) => {
                 if (err) {
-                    return res.status(400).send({
-                        status: 400,
+                    return res.status(500).send({
+                        status: 500,
                         error: err.message
                     });
                 }
