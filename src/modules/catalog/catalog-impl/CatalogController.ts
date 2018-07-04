@@ -23,20 +23,24 @@ export class CatalogController implements CatalogControllerAPI {
         const productName: string = req.params.productName;
         this.productController.getProductByName(productName)
             .then( (products) => {
-                Promise.all(
-                    products.map(product => {
-                        return new Promise( (resolve => {
-                            this.stockController.getStockPlaces(product.id())
-                                .then( stockPlaces => {
-                                    const saleables: SaleableAmount[] = stockPlaces.map( places => new SaleableAmountImpl(product, places));
-                                    const catalog: Catalog = new CatalogImpl(saleables);
-                                    resolve(catalog)
-                                })
-                        }))
+                if(products.length !== 0) {
+                    Promise.all(
+                        products.map(product => {
+                            return new Promise( (resolve => {
+                                this.stockController.getStockPlaces(product.id())
+                                    .then( stockPlaces => {
+                                        const saleables: SaleableAmount[] = stockPlaces.map( places => new SaleableAmountImpl(product, places));
+                                        const catalog: Catalog = new CatalogImpl(saleables);
+                                        resolve(catalog)
+                                    })
+                            }))
+                        })
+                    ).then( result => {
+                        res.send({status: 200, catalog: result})
                     })
-                ).then( result => {
-                    res.send({status: 200, catalog: result})
-                })
+                } else {
+                    res.send({status: 200, catalog: {products: []}})
+                }
             })
     }
     

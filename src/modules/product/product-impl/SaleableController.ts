@@ -101,7 +101,7 @@ export class SaleableController implements SaleableControllerAPI {
                         const product: Saleable[] = this.buildSaleable(productFound);
                         resolve(product)
                     } else {
-                        reject("Not Found");
+                        resolve([]);
                     }
                 })
         })
