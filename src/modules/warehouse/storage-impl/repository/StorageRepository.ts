@@ -2,6 +2,7 @@ import { Response} from "express";
 import mongoose from "mongoose";
 import {ObjectID} from "bson";
 import {Storage} from "../../storage-api/model/Storage";
+import {Storage as StorageImpl} from "../../storage-impl/model/Storage"
 import {StoredProduct} from "../../storage-api/model/StoredProduct";
 
 export class StorageRepository {
@@ -25,14 +26,25 @@ export class StorageRepository {
         StorageSchema.findById(storageId, callback)
     }
 
-    public getProductInAllStorages(productId: ObjectID, callback: (error: any, response: any) => Response) {
+    public getProductInAllStorages(productId: ObjectID, callback: (error: any, response: any) => any) {
         StorageSchema.find({'stored.productId': productId}, callback)
+    }
+
+    public markProductsAsSold(soldProducts: {storageId: ObjectID, productId: string, amount: number, isDelivery: boolean},
+                              callback: (error: any, response: any) => Response,
+                              error?: (error: string) => Response) {
+        StorageSchema.findById(soldProducts.storageId, (error, storage) => {
+            let storageInstance: Storage = new StorageImpl(storage);
+            storageInstance = storageInstance.markProductsAsSold(soldProducts.productId, soldProducts.amount, soldProducts.isDelivery);
+            const storageDoc = new StorageSchema(storageInstance);
+            storageDoc.save(callback) // TODO Test
+        })
     }
 
     private getStorageInstance(storage: Storage): Promise<any> {
         return new Promise( ((resolve, reject) => {
-            const auxStored: {productId: ObjectID, stored: StoredProduct[]}[] = [];
-            storage.storedProduct.forEach( (value: StoredProduct[], key: ObjectID) => {
+            const auxStored: {productId: string, stored: StoredProduct[]}[] = [];
+            storage.storedProduct.forEach( (value: StoredProduct[], key: string) => {
                 auxStored.push({productId: key, stored: value});
             });
             resolve(new StorageSchema({
