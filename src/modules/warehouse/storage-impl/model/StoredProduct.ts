@@ -4,7 +4,6 @@ import {ProductState} from "../../storage-api/model/ProductState";
 import {WaitingToSell} from "./productState/WaitingToSell";
 import {WaitingToGive} from "./productState/WaitingToGive";
 import {WaitingToDeliver} from "./productState/WaitingToDeliver";
-import {OutOfStock} from "./productState/OutOfStock";
 import {Delivered} from "./productState/Delivered";
 export class StoredProduct implements StoredProductAPI {
     productId: ObjectID;
@@ -38,8 +37,6 @@ export class StoredProduct implements StoredProductAPI {
                 return new WaitingToGive();
             case 'WaitingToDeliver':
                 return new WaitingToDeliver();
-            case 'OutOfStock':
-                return new OutOfStock();
             case 'Delivered':
                 return new Delivered();
             default:
