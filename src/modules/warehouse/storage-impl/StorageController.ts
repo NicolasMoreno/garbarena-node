@@ -111,4 +111,24 @@ export class StorageController implements StorageControllerAPI,StorageNotifyer {
                 })
         });
     }
+
+    addProductToStorage = (req: Request, res: Response): void => {
+        const storageId: ObjectID = req.body.storageId;
+        this.repository.getStorageById(storageId,
+            (error, storage) => {
+                if (error) return res.status(500).send({status: 500, error: error});
+                const storageImpl: Storage = new StorageImpl(storage);
+                const productId: string = req.body.saleableId;
+                const amount: number = req.body.amount;
+                storageImpl.reStockProduct(productId,amount);
+                this.repository.updateStorage(storageImpl,
+                    (error, response) => {
+                        if (error) return res.status(500).send({status: 500, error: error});
+                        return res.send({
+                            status: 200,
+                            storage: response
+                        })
+                    })
+            })
+    }
 }

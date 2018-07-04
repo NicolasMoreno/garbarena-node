@@ -30,6 +30,10 @@ export class StorageRepository {
         StorageSchema.find({'stored.productId': productId}, callback)
     }
 
+    public updateStorage(storage: Storage, callback: (error: any, response: any) => Response) {
+        this.getUpdateStorageInstance(storage).then(storageDocument => UpdateStorageSchema.findByIdAndUpdate(storage.getId(), storageDocument, {new: true}, callback));
+    }
+
     public markProductsAsSold(soldProducts: {storageId: ObjectID, productId: string, amount: number, isDelivery: boolean},
                               callback: (error: any, response: any) => Response,
                               error?: (error: string) => Response) {
@@ -53,6 +57,19 @@ export class StorageRepository {
             }))
         }))
     }
+
+    private getUpdateStorageInstance(storage: Storage): Promise<any> {
+        return new Promise( ((resolve, reject) => {
+            const auxStored: {productId: string, elements: StoredProduct[]}[] = [];
+            storage.storedProduct.forEach( (value: StoredProduct[], key: string) => {
+                auxStored.push({productId: key, elements: value});
+            });
+            resolve(new UpdateStorageSchema({
+                address: storage.address,
+                stored: auxStored
+            }))
+        }))
+    }
 }
 
 const storedSchema = new mongoose.Schema({
@@ -68,4 +85,13 @@ const storageSchema = new mongoose.Schema({
     }]
 });
 
+const updateStorageSchema = new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
+    address: mongoose.Schema.Types.ObjectId,
+    stored: [{
+        productId: mongoose.Schema.Types.ObjectId,
+        elements: [storedSchema]
+    }]
+});
+const UpdateStorageSchema = mongoose.model('UpdateStorage', updateStorageSchema, 'storages');
 export const StorageSchema = mongoose.model('Storage', storageSchema);

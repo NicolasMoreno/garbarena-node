@@ -7,6 +7,7 @@ export interface StorageController {
     getStorage(req: Request, res: Response): void
     getAmountByProductId(req: Request, res: Response): void
     reduceAmountToProduct(req: Request, res: Response): void
+    addProductToStorage(req: Request, res: Response): void
     withdrawProduct(req: Request, res: Response): void
     getStorageByProductId(storageId: ObjectID): Promise<Storage[]>
 }

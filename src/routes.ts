@@ -22,6 +22,7 @@ router.post('/api/category/add', categoryController.addCategory);
 
 // Storage
 router.get('/api/storage/:storageId', storageController.getStorage);
+router.put('/api/storage/reStock', storageController.addProductToStorage);
 router.post('/api/storage/add', storageController.addStorage);
 
 //Stock

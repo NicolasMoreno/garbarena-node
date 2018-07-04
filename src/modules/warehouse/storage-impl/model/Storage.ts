@@ -36,10 +36,14 @@ export class Storage implements StorageAPI {
         }
     }
 
-    reStockProduct(productId: ObjectID, amount: number): number {
-        let storedNumber: number = 0;
-
-        return storedNumber
+    reStockProduct(productId: string, amount: number): number {
+        const product: StoredProduct = new StoredProductImpl({productId: productId, state: {stateName: 'WaitingToSell'}});
+        let storedProducts: StoredProduct[] = this.storedProduct.get(productId) ? this.storedProduct.get(productId) : [];
+        for (let i = 0; i < amount; i++) {
+            storedProducts.push(product)
+        }
+        this.storedProduct.set(productId, storedProducts);
+        return this.getAmountWithProductId(productId)
     }
 
     markProductsAsSold(productId: string, amount: number, isDelivery: boolean): StorageAPI {
