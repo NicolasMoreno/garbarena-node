@@ -11,6 +11,8 @@ export class ComposedProduct implements ComposedProductAPI {
     price: number;
     products: ObjectID[];
     productType: Type;
+    discountFactor: number;
+
     private _id: ObjectID;
 
     private _productsObjectList: Saleable[] = [];
@@ -19,6 +21,7 @@ export class ComposedProduct implements ComposedProductAPI {
         this.categoryId = baseProduct.categoryId;
         this._id = baseProduct._id;
         this.name = baseProduct.name;
+        this.discountFactor = baseProduct.discountFactor ? baseProduct.discountFactor : 0;
         this.products = baseProduct.products;
         this.productType = new Type( {value: 'Combo'})
     }
@@ -43,6 +46,7 @@ export class ComposedProduct implements ComposedProductAPI {
                 this.price += product.price
             }
         });
+        if(this.discountFactor !== 0) this.price = (this.price * (1 - (this.discountFactor / 100)));
     }
 
     addProductObject(saleable: Saleable) {
@@ -56,6 +60,7 @@ export class ComposedProduct implements ComposedProductAPI {
     id(): ObjectID {
         return this._id
     }
+
 }
 
 /*

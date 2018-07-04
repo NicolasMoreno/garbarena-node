@@ -2,7 +2,7 @@ import { Response} from "express";
 import mongoose from "mongoose";
 import {ObjectID} from "bson";
 import {Storage} from "../../storage-api/model/Storage";
-import {Storage as StorageImpl} from "../../storage-impl/model/Storage"
+import {Storage as StorageImpl} from "../model/Storage"
 import {StoredProduct} from "../../storage-api/model/StoredProduct";
 
 export class StorageRepository {

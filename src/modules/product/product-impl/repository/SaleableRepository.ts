@@ -67,6 +67,7 @@ export class SaleableRepository {
                         price: auxSaleable.price,
                         categoryId: auxSaleable.categoryId,
                         productType: auxSaleable.productType,
+                        discountFactor: auxSaleable.discountFactor,
                         products: auxSaleable.productsObjectList
                     }))
                 });
@@ -103,6 +104,7 @@ const saleableSchema = new mongoose.Schema({
     name: {type: String, required: true},
     price: {type: Number, required: true},
     categoryId: {type: mongoose.Schema.Types.ObjectId, required: true},
+    discountFactor: {type: Number, required: false},
     productType: mongoose.Schema.Types.Mixed,
     products: {type: [mongoose.Schema.Types.Mixed], required: () => saleableSchema.get('productType') === 'Combo'}, // TODO ME MOLESTA EL ARRAY DE PRODUCTS EN UN PRODUCTO BASE
 });
