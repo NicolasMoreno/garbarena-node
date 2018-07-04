@@ -10,9 +10,12 @@ export class StoredProduct implements StoredProductAPI {
     productId: ObjectID;
     state: ProductState;
 
+    private readonly _id: ObjectID;
+
     constructor(storedProduct: any) {
         this.productId = storedProduct.productId;
-        this.state = this.getState(storedProduct);
+        this._id = storedProduct._id;
+        this.state = this.getState(storedProduct.state);
     }
 
     sellProduct(viaDelivery: boolean): boolean {
@@ -42,5 +45,9 @@ export class StoredProduct implements StoredProductAPI {
             default:
                 this.state = state;
         }
+    }
+
+    getId(): ObjectID {
+        return this._id;
     }
 }

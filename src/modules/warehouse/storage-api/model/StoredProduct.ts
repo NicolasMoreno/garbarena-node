@@ -9,4 +9,6 @@ export interface StoredProduct {
     withdrawProduct(amount: number): boolean
     setState(state: ProductState): void
 
+    getId(): ObjectID
+
 }

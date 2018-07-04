@@ -43,9 +43,9 @@ export class StorageRepository {
 
     private getStorageInstance(storage: Storage): Promise<any> {
         return new Promise( ((resolve, reject) => {
-            const auxStored: {productId: string, stored: StoredProduct[]}[] = [];
+            const auxStored: {productId: string, elements: StoredProduct[]}[] = [];
             storage.storedProduct.forEach( (value: StoredProduct[], key: string) => {
-                auxStored.push({productId: key, stored: value});
+                auxStored.push({productId: key, elements: value});
             });
             resolve(new StorageSchema({
                 address: storage.address,
@@ -55,11 +55,16 @@ export class StorageRepository {
     }
 }
 
+const storedSchema = new mongoose.Schema({
+    productId: mongoose.Schema.Types.ObjectId,
+    state: mongoose.Schema.Types.Mixed
+});
+
 const storageSchema = new mongoose.Schema({
     address: mongoose.Schema.Types.ObjectId,
     stored: [{
         productId: mongoose.Schema.Types.ObjectId,
-        stored: [mongoose.Schema.Types.Mixed]
+        elements: [storedSchema]
     }]
 });
 

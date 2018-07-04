@@ -5,7 +5,7 @@ export class Stock implements StockAPI {
     storageId: string;
 
     constructor(stock: any) {
-        this.amount = stock.number;
+        this.amount = stock.amount;
         this.storageId = stock.storageId;
     }
 

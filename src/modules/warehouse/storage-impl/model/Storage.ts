@@ -3,6 +3,7 @@ import {StoredProduct} from "../../storage-api/model/StoredProduct";
 import {ObjectID} from "bson";
 import {WaitingToDeliver} from "./productState/WaitingToDeliver";
 import {WaitingToGive} from "./productState/WaitingToGive";
+import {StoredProduct as StoredProductImpl} from "./StoredProduct";
 
 export class Storage implements StorageAPI {
     address: ObjectID;
@@ -28,7 +29,7 @@ export class Storage implements StorageAPI {
         let storedProducts = this.storedProduct.get(productId);
         if(storedProducts) {
             let count: number = 0;
-            this.storedProduct.get(productId).map( stored => stored.state.stateName === 'WaitingToSell' ? count++ : false);
+            this.storedProduct.get(productId).map( stored => stored.state.stateName === "WaitingToSell" ? count++ : false);
             return count
         } else {
             return undefined
@@ -41,7 +42,7 @@ export class Storage implements StorageAPI {
         return storedNumber
     }
 
-    markProductsAsSold(productId: string, amount: number, isDelivery: boolean): Storage {
+    markProductsAsSold(productId: string, amount: number, isDelivery: boolean): StorageAPI {
         const storedProducts: StoredProduct[] = this.storedProduct.get(productId);
         let auxAmount = amount;
         storedProducts.map( stored => {
@@ -61,7 +62,11 @@ export class Storage implements StorageAPI {
 
     private getData(storage: any): Map<string, StoredProduct[]> {
         const productMap: Map<string, StoredProduct[]> = new Map();
-        storage.stored.forEach( (value: {productId: string, stored: StoredProduct[]}) => productMap.set(value.productId.toString(), value.stored));
+        storage.stored.forEach( (value: {productId: string, elements: StoredProduct[]}) => productMap.set(value.productId.toString(), (value.elements).map( store => new StoredProductImpl(store))));
         return productMap;
+    }
+
+    getId(): ObjectID {
+        return this._id;
     }
 }

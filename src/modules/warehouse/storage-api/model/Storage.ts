@@ -9,4 +9,5 @@ export interface Storage {
     reStockProduct(productId: ObjectID, amount: number): number
     getAmountWithProductId(productId: string): number
     markProductsAsSold(productId: string, amount: number, isDelivery: boolean): Storage
+    getId(): ObjectID
 }

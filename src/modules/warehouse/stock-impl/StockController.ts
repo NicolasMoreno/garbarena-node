@@ -23,7 +23,12 @@ export class StockController implements StockControllerAPI {
         this.storageController.getStorageByProductId(productId)
             .then( storages => {
                 const stocks: StockInterface[] = storages.map(storage =>
-                    new Stock({amount: storage.getAmountWithProductId(productId.toString()), storageId: storage}))
+                    new Stock({amount: storage.getAmountWithProductId(productId.toString()), storageId: storage.getId()}))
+
+                return res.send({
+                    status: 200,
+                    stock: stocks
+                })
             })
     }
     

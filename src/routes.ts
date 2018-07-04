@@ -26,5 +26,6 @@ router.post('/api/storage/add', storageController.addStorage);
 
 //Stock
 router.get('/api/stock/product/:productId', stockController.getStockBySaleableId);
+router.get('/api/stock/:productId', stockController.getStockPlacesByProductId)
 
 export default router;
