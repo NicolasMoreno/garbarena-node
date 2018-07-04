@@ -30,6 +30,16 @@ export class StockController implements StockControllerAPI {
                     stock: stocks
                 })
             })
+    };
+
+    getStockPlaces(productId: ObjectID): Promise<StockInterface[]> {
+        return new Promise<StockInterface[]>( ((resolve, reject) => {
+            this.storageController.getStorageByProductId(productId)
+                .then( storages => {
+                    const stocks: StockInterface[] = storages.map(storage => new Stock({amount: storage.getAmountWithProductId(productId.toString()), storageId: storage.getId()}));
+                    resolve(stocks)
+                })
+        }))
     }
     
 }

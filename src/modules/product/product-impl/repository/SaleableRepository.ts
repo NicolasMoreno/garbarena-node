@@ -34,6 +34,10 @@ export class SaleableRepository {
         NewSaleableSchema.findById( saleableId, callback)
     }
 
+    public getProductByName(saleableName: string, callback: (error: any, elemFound: any) => any) {
+        NewSaleableSchema.find({'name': saleableName}, callback)
+    }
+
     public updateProduct(saleable: Saleable, callback: (error: any, response: any) => Response,
                          notFoundCallback?: (message: string) => Response) {
         this.getProductById(saleable.id(), (errorFound, saleableFound) => {

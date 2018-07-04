@@ -90,6 +90,21 @@ export class SaleableController implements SaleableControllerAPI {
                     error: errorMessage
                 })
             })
+    };
+
+    getProductByName(productName: string): Promise<Saleable[]> {
+        return new Promise<Saleable[]>( (resolve, reject) => {
+            this.repository.getProductByName(productName,
+                (error, productFound) => {
+                    if (error) reject(error);
+                    if (productFound[0]) {
+                        const product: Saleable[] = this.buildSaleable(productFound);
+                        resolve(product)
+                    } else {
+                        reject("Not Found");
+                    }
+                })
+        })
     }
 
     private buildSaleableFromBody(req: Request, res: Response): Saleable {
@@ -100,4 +115,16 @@ export class SaleableController implements SaleableControllerAPI {
             return new BaseProduct(req.body)
         }
     }
+
+    private buildSaleable(products: any[]): Saleable[] {
+        return products.map(product => {
+            const type = product.productType.value;
+            if (type === 'Combo') {
+                return new ComposedProduct(product)
+            } else {
+                return new BaseProduct(product)
+            }
+        })
+    }
+
 }
