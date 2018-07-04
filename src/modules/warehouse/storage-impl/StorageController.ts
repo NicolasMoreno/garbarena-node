@@ -71,31 +71,11 @@ export class StorageController implements StorageControllerAPI,StorageNotifyer {
             })
     };
 
-    notifySoldProduct(req: Request, res: Response): void {
-        const params = req.body;
-        const storageId: ObjectID = params.storageId;
-        const saleableId: string = params.saleableId;
-        const amount: number = params.amount;
-        const isDelivery: boolean = params.isDelivery;
-        if(storageId && saleableId && amount && isDelivery) { //TODO Probably crash when delivery is false
-            this.repository.markProductsAsSold({storageId: storageId, productId: saleableId, amount: amount, isDelivery: isDelivery},
-                (error, response) => {
-                    if (error) {
-                        return res.status(500).send({
-                            status: 500,
-                            error: error
-                        })
-                    }
-                    return res.send({
-                        status: 200,
-                        response: response,
-                    })
-                })
-        }
-    }
-
-    private buildStorageFromBody(req: Request, res: Response): Storage {
-        return new StorageImpl(req.body);
+    notifySoldProduct(storageId: ObjectID, saleableId: string, amount: number, isDelivery: boolean,
+                      callback: (error: any, response: any) => any,
+                      onError: (errorMessage: string) => any): void {
+         //TODO Probably crash when delivery is false
+            this.repository.markProductsAsSold({storageId: storageId, productId: saleableId, amount: amount, isDelivery: isDelivery},callback, onError)
     }
 
     getStorageByProductId(storageId: ObjectID): Promise<Storage[]> {
@@ -130,5 +110,9 @@ export class StorageController implements StorageControllerAPI,StorageNotifyer {
                         })
                     })
             })
+    };
+
+    private buildStorageFromBody(req: Request, res: Response): Storage {
+        return new StorageImpl(req.body);
     }
 }

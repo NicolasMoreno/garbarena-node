@@ -1,5 +1,7 @@
-import {Request, Response} from "express";
+import {ObjectID} from "bson";
 
 export interface StorageNotifyer {
-    notifySoldProduct(req: Request, res: Response): void
+    notifySoldProduct(storageId: ObjectID, saleableId: string, amount: number, isDelivery: boolean,
+                      callback: (error: any, response: any) => any,
+                      onError: (errorMessage: string) => any): void
 }

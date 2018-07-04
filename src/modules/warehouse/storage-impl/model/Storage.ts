@@ -46,7 +46,7 @@ export class Storage implements StorageAPI {
         return this.getAmountWithProductId(productId)
     }
 
-    markProductsAsSold(productId: string, amount: number, isDelivery: boolean): StorageAPI {
+    markProductsAsSold(productId: string, amount: number, isDelivery: boolean): boolean {
         const storedProducts: StoredProduct[] = this.storedProduct.get(productId);
         let auxAmount = amount;
         storedProducts.map( stored => {
@@ -60,8 +60,9 @@ export class Storage implements StorageAPI {
         });
         if (auxAmount == 0) {
             this.storedProduct.set(productId, storedProducts);
+            return true;
         }
-        return this; // TODO Hacer en caso de no haber la cantidad adecuada de productos
+        return false;
     }
 
     private getData(storage: any): Map<string, StoredProduct[]> {

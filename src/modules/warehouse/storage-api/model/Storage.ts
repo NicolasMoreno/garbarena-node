@@ -8,6 +8,6 @@ export interface Storage {
     getProductsWithAmount(): Map<ObjectID, number>
     reStockProduct(productId: string, amount: number): number
     getAmountWithProductId(productId: string): number
-    markProductsAsSold(productId: string, amount: number, isDelivery: boolean): Storage
+    markProductsAsSold(productId: string, amount: number, isDelivery: boolean): boolean
     getId(): ObjectID
 }

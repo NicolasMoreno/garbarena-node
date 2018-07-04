@@ -36,12 +36,12 @@ export class StorageRepository {
 
     public markProductsAsSold(soldProducts: {storageId: ObjectID, productId: string, amount: number, isDelivery: boolean},
                               callback: (error: any, response: any) => Response,
-                              error?: (error: string) => Response) {
+                              onError: (error: string) => Response) {
         StorageSchema.findById(soldProducts.storageId, (error, storage) => {
             let storageInstance: Storage = new StorageImpl(storage);
-            storageInstance = storageInstance.markProductsAsSold(soldProducts.productId, soldProducts.amount, soldProducts.isDelivery);
-            const storageDoc = new StorageSchema(storageInstance);
-            storageDoc.save(callback) // TODO Test
+            let canSell: boolean = storageInstance.markProductsAsSold(soldProducts.productId, soldProducts.amount, soldProducts.isDelivery);
+            if(canSell) this.getUpdateStorageInstance(storageInstance).then( (storageDoc) => UpdateStorageSchema.findByIdAndUpdate(storageInstance.getId(), storageDoc, {new: true}, callback));
+            else onError("No stock to sell")
         })
     }
 

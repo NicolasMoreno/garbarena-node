@@ -10,7 +10,7 @@ const saleableController = new SaleableController();
 const categoryController = new CategoryController();
 const storageController = new StorageController();
 const stockController = new StockController(storageController);
-const catalogController = new CatalogController(saleableController, stockController);
+const catalogController = new CatalogController(saleableController, stockController, storageController);
 
 // Product
 router.get('/api/product/id/:productId', saleableController.getProductById);
@@ -34,5 +34,6 @@ router.get('/api/stock/:productId', stockController.getStockPlacesByProductId);
 // Catalog
 
 router.get('/api/catalog/product/:productName', catalogController.getProductsByName);
+router.post('/api/catalog/product/buy', catalogController.buySaleable);
 
 export default router;
