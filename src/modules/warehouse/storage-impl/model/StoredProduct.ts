@@ -34,9 +34,9 @@ export class StoredProduct implements StoredProductAPI {
             case 'WaitingToSell':
                 return new WaitingToSell();
             case 'WaitingToGive':
-                return new WaitingToGive();
+                return new WaitingToGive(state['username']);
             case 'WaitingToDeliver':
-                return new WaitingToDeliver();
+                return new WaitingToDeliver(state['username']);
             case 'Delivered':
                 return new Delivered();
             default:
