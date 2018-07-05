@@ -78,6 +78,16 @@ export class StorageController implements StorageControllerAPI,StorageNotifyer {
             this.repository.markProductsAsSold({storageId: storageId, productId: saleableId, amount: amount, isDelivery: isDelivery},callback, onError)
     }
 
+    checkStock(storageId: ObjectID, saleableId: string, amount: number, callback: (hasStock: boolean) => any): void {
+        this.repository.getStorageById(storageId,
+            (error, storageResponse) => {
+                const storage: Storage = new StorageImpl(storageResponse);
+                const amountAvailable: number = storage.getAmountWithProductId(saleableId);
+                if (amountAvailable > amount)  callback(true);
+                else callback(false)
+            })
+    }
+
     getStorageByProductId(storageId: ObjectID): Promise<Storage[]> {
         return new Promise<Storage[]>( (resolve, reject ) => {
             this.repository.getProductInAllStorages(storageId,
@@ -115,4 +125,5 @@ export class StorageController implements StorageControllerAPI,StorageNotifyer {
     private buildStorageFromBody(req: Request, res: Response): Storage {
         return new StorageImpl(req.body);
     }
+
 }

@@ -22,7 +22,7 @@ export class StorageRepository {
         this.getStorageInstance(storage).then(storageDocument => storageDocument.save(callback));
     }
 
-    public getStorageById(storageId: ObjectID, callback: (error: any, response: any) => Response) {
+    public getStorageById(storageId: ObjectID, callback: (error: any, response: any) => any) {
         StorageSchema.findById(storageId, callback)
     }
 

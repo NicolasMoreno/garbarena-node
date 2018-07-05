@@ -1,5 +1,7 @@
 import {SalesController as SalesControllerAPI} from "../sales-api/SalesController";
 import {SalesRecorder} from "../sales-api/SalesRecorder";
+import {ObjectID} from "bson";
+import {Sale} from "./model/Sale";
 
 export class SalesController implements SalesControllerAPI {
 
@@ -9,16 +11,26 @@ export class SalesController implements SalesControllerAPI {
         return false;
     }
 
-    startTransaction(creditCardId: string, price: number, onSuccess?: (response: any) => void, onError?: (error: any) => void): void {
-        if(creditCardId.length === 10) {
-            onSuccess(true);
+    startTransaction(creditCardNumber: string,
+                     price: number,
+                     productId: string,
+                     storageId: ObjectID,
+                     username: string,
+                     onSuccess?: (response: any) => void,
+                     onError?: (error: any) => void): void {
+
+        if (creditCardNumber.length === 16) {
+            this.salesRecorder.recordSale(new Sale({date: new Date(), price: price, product: productId, storage: storageId, username: username }));
+            onSuccess(true)
         } else {
-            onError(true);
+            onError("Card not valid")
         }
     }
 
     transactionSuccess(): boolean {
         return false;
     }
+
+
 
 }

@@ -4,13 +4,17 @@ import {CategoryController} from "./modules/product/category-impl/CategoryContro
 import {StorageController} from "./modules/warehouse/storage-impl/StorageController";
 import {StockController} from "./modules/warehouse/stock-impl/StockController";
 import {CatalogController} from "./modules/catalog/catalog-impl/CatalogController";
+import {SalesRecorderController} from "./modules/sales/sales-impl/SalesRecorderController";
+import {SalesController} from "./modules/sales/sales-impl/SalesController";
 
 const router = require('express').Router();
 const saleableController = new SaleableController();
 const categoryController = new CategoryController();
 const storageController = new StorageController();
 const stockController = new StockController(storageController);
-const catalogController = new CatalogController(saleableController, stockController, storageController);
+const salesRecorderController = new SalesRecorderController();
+const salesController = new SalesController(salesRecorderController)
+const catalogController = new CatalogController(saleableController, stockController, storageController, salesController);
 
 // Product
 router.get('/api/product/id/:productId', saleableController.getProductById);

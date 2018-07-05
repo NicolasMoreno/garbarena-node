@@ -1,8 +1,16 @@
-import {SalesRecorder} from "./SalesRecorder";
+
+import {ObjectID} from "bson";
 
 export interface SalesController {
 
-    startTransaction(creditCardId: string, price: number, onSuccess?: (response: any) => void, onError?: (error: any) => void): void
+    startTransaction(creditCardNumber: string,
+                     price: number,
+                     productId: string,
+                     storageId: ObjectID,
+                     username: string,
+                     onSuccess?: (response: any) => void,
+                     onError?: (error: any) => void): void
+
     transactionSuccess(): boolean
     failedTransaction(): boolean
 }
