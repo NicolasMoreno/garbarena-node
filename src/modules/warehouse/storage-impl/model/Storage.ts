@@ -46,12 +46,12 @@ export class Storage implements StorageAPI {
         return this.getAmountWithProductId(productId)
     }
 
-    markProductsAsSold(productId: string, amount: number, isDelivery: boolean): boolean {
+    markProductsAsSold(productId: string, amount: number, isDelivery: boolean, username: string): boolean {
         const storedProducts: StoredProduct[] = this.storedProduct.get(productId);
         let auxAmount = amount;
         storedProducts.map( stored => {
             if (stored.state.stateName === 'WaitingToSell' && auxAmount > 0) {
-                stored.setState(isDelivery ? new WaitingToDeliver() : new WaitingToGive());
+                stored.setState(isDelivery ? new WaitingToDeliver(username) : new WaitingToGive(username));
                 auxAmount--;
                 return stored;
             } else {

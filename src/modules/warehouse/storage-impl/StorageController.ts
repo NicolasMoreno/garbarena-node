@@ -71,11 +71,11 @@ export class StorageController implements StorageControllerAPI,StorageNotifyer {
             })
     };
 
-    notifySoldProduct(storageId: ObjectID, saleableId: string, amount: number, isDelivery: boolean,
+    notifySoldProduct(storageId: ObjectID, saleableId: string, amount: number, isDelivery: boolean, username: string,
                       callback: (error: any, response: any) => any,
                       onError: (errorMessage: string) => any): void {
          //TODO Probably crash when delivery is false
-            this.repository.markProductsAsSold({storageId: storageId, productId: saleableId, amount: amount, isDelivery: isDelivery},callback, onError)
+            this.repository.markProductsAsSold({storageId: storageId, productId: saleableId, amount: amount, isDelivery: isDelivery, username: username},callback, onError)
     }
 
     checkStock(storageId: ObjectID, saleableId: string, amount: number, callback: (hasStock: boolean) => any): void {

@@ -13,7 +13,7 @@ const categoryController = new CategoryController();
 const storageController = new StorageController();
 const stockController = new StockController(storageController);
 const salesRecorderController = new SalesRecorderController();
-const salesController = new SalesController(salesRecorderController)
+const salesController = new SalesController(salesRecorderController);
 const catalogController = new CatalogController(saleableController, stockController, storageController, salesController);
 
 // Product

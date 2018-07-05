@@ -34,12 +34,12 @@ export class StorageRepository {
         this.getUpdateStorageInstance(storage).then(storageDocument => UpdateStorageSchema.findByIdAndUpdate(storage.getId(), storageDocument, {new: true}, callback));
     }
 
-    public markProductsAsSold(soldProducts: {storageId: ObjectID, productId: string, amount: number, isDelivery: boolean},
+    public markProductsAsSold(soldProducts: {storageId: ObjectID, productId: string, amount: number, isDelivery: boolean, username: string},
                               callback: (error: any, response: any) => Response,
                               onError: (error: string) => Response) {
         StorageSchema.findById(soldProducts.storageId, (error, storage) => {
             let storageInstance: Storage = new StorageImpl(storage);
-            let canSell: boolean = storageInstance.markProductsAsSold(soldProducts.productId, soldProducts.amount, soldProducts.isDelivery);
+            let canSell: boolean = storageInstance.markProductsAsSold(soldProducts.productId, soldProducts.amount, soldProducts.isDelivery, soldProducts.username);
             if(canSell) this.getUpdateStorageInstance(storageInstance).then( (storageDoc) => UpdateStorageSchema.findByIdAndUpdate(storageInstance.getId(), storageDoc, {new: true}, callback));
             else onError("No stock to sell")
         })

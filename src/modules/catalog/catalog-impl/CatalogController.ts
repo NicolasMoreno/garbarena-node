@@ -29,7 +29,7 @@ export class CatalogController implements CatalogControllerAPI {
                    const username: string = params.username;
                    this.saleController.startTransaction(creditCardNumber, price, saleableId, storageId, username,
                        (success: boolean) => {
-                           this.storageNotifyer.notifySoldProduct(storageId, saleableId, amount, isDelivery,
+                           this.storageNotifyer.notifySoldProduct(storageId, saleableId, amount, isDelivery, username,
                                (error, response) => {
                                    if (error) return res.status(500).send({status: 500, err: error});
                                    return res.send({
